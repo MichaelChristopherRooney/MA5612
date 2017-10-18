@@ -1,6 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+// This is a version of matmul designed to time matrix multiplication using
+// different sized matrices.
+// The multiplication is performed a number of times and the average time is recorded
+
 // matrix a is l x m
 // matrix b is m x n
 // matrix c is l x n
@@ -15,6 +19,11 @@ void mat_mul(double **a, double **b, double **c, int l, int m, int n){
 			c[i][j] = sum;
 		}
 	}
+}
+
+void free_matrix(double **mat){
+	free(mat[0]);
+	free(mat);
 }
 
 double **create_empty_matrix(int m, int n){
@@ -49,48 +58,38 @@ void print_matrix(double **mat, int m, int n){
 	}
 }
 
-void time_and_mul_matrices(double **a, double **b, double **c, int l, int m, int n){
+long long time_matmul(int size){
+	double **a = create_matrix_with_random_values(size, size);
+	double **b = create_matrix_with_random_values(size, size);
+	double **c = create_empty_matrix(size, size);
 	struct timeval start_time;
 	struct timeval end_time;
 	long long time_taken;
 	gettimeofday(&start_time, NULL);
-	mat_mul(a, b, c, l, m, n);
+	mat_mul(a, b, c, size, size, size);
 	gettimeofday(&end_time, NULL);
 	time_taken = (end_time.tv_sec - start_time.tv_sec) * 1000000L + (end_time.tv_usec - start_time.tv_usec);
-	printf("For l=%d, m=%d, n=%d the time taken was: %lld microseconds\n", l, m, n, time_taken);
+	free_matrix(a);
+	free_matrix(b);
+	free_matrix(c);
+	return time_taken;
 }
 
-int parse_args(char *argv[], int *l, int *m, int *n){
-	*l = atoi(argv[1]);
-	*m = atoi(argv[2]);
-	*n = atoi(argv[3]);
-	if(*l == 0 || *m == 0 || *n == 0){
-		return 1;
-	}
-	return 0;
-}
+#define NUM_ITERATIONS 10
+#define NUM_SIZES 6
+const int sizes[NUM_SIZES] = { 10, 20, 40, 80, 160, 320 }; 
 
 int main(int argc, char *argv[]){
-	if(argc != 4){
-		printf("Expected 3 ints passed as arguments!\n");
-		return 1;
-	}
-	int l, m, n;
-	int result = parse_args(argv, &l, &m, &n);
-	if(result == 1){
-		printf("Error parsing integer arguments.\n");
-		return 1;
-	}
 	srandom(time(NULL));
-	double **a = create_matrix_with_random_values(l, m);
-	double **b = create_matrix_with_random_values(m, n);
-	double **c = create_empty_matrix(l, n);
-	time_and_mul_matrices(a, b, c, l, m, n);
-	//printf("a\n");
-	//print_matrix(a, l, m);
-	//printf("b\n");
-	//print_matrix(b, m, n);
-	//printf("c\n");
-	//print_matrix(c, l, n);
+	int i;
+	for(i = 0; i < NUM_SIZES; i++){
+		long long time_taken = 0L;
+		int j;
+		for(j = 0; j < NUM_ITERATIONS; j++){
+			time_taken += time_matmul(sizes[i]);
+		}
+		time_taken = time_taken / NUM_ITERATIONS;
+		printf("For size=%d the average time taken across %d runs was: %lld microseconds\n", sizes[i], NUM_ITERATIONS, time_taken);
+	}
 	return 0;
 }
