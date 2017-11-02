@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
 // matrix a is l x m
 // matrix b is m x n
@@ -49,17 +50,6 @@ void print_matrix(double **mat, int m, int n){
 	}
 }
 
-void time_and_mul_matrices(double **a, double **b, double **c, int l, int m, int n){
-	struct timeval start_time;
-	struct timeval end_time;
-	long long time_taken;
-	gettimeofday(&start_time, NULL);
-	mat_mul(a, b, c, l, m, n);
-	gettimeofday(&end_time, NULL);
-	time_taken = (end_time.tv_sec - start_time.tv_sec) * 1000000L + (end_time.tv_usec - start_time.tv_usec);
-	printf("For l=%d, m=%d, n=%d the time taken was: %lld microseconds\n", l, m, n, time_taken);
-}
-
 int parse_args(char *argv[], int *l, int *m, int *n){
 	*l = atoi(argv[1]);
 	*m = atoi(argv[2]);
@@ -81,16 +71,15 @@ int main(int argc, char *argv[]){
 		printf("Error parsing integer arguments.\n");
 		return 1;
 	}
-	srandom(time(NULL));
 	double **a = create_matrix_with_random_values(l, m);
 	double **b = create_matrix_with_random_values(m, n);
 	double **c = create_empty_matrix(l, n);
-	time_and_mul_matrices(a, b, c, l, m, n);
-	//printf("a\n");
-	//print_matrix(a, l, m);
-	//printf("b\n");
-	//print_matrix(b, m, n);
-	//printf("c\n");
-	//print_matrix(c, l, n);
+	mat_mul(a, b, c, l, m, n);
+	printf("a\n");
+	print_matrix(a, l, m);
+	printf("b\n");
+	print_matrix(b, m, n);
+	printf("c\n");
+	print_matrix(c, l, n);
 	return 0;
 }

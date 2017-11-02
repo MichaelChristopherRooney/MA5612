@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
+#include <sys/time.h>
 
 // This is a version of matmul designed to time matrix multiplication using
 // different sized matrices.
@@ -76,8 +78,8 @@ long long time_matmul(int size){
 }
 
 #define NUM_ITERATIONS 10
-#define NUM_SIZES 6
-const int sizes[NUM_SIZES] = { 10, 20, 40, 80, 160, 320 }; 
+#define NUM_SIZES 7
+const int sizes[NUM_SIZES] = { 10, 20, 40, 80, 160, 320, 640 }; 
 
 int main(int argc, char *argv[]){
 	srandom(time(NULL));
