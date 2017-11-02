@@ -6,6 +6,7 @@
 // This is a version of matmul designed to time matrix multiplication using
 // different sized matrices.
 // The multiplication is performed a number of times and the average time is recorded
+// A transpose cache  optimisation is used
 
 // matrix a is l x m
 // matrix b is m x n
@@ -16,7 +17,7 @@ void mat_mul(double **a, double **b, double **c, int l, int m, int n){
 		for(j = 0; j < n; j++){
 			double sum = 0.0;
 			for(k = 0; k < m; k++){
-				sum += a[i][k] * b[k][j];
+				sum += a[i][k] * b[j][k];
 			}
 			c[i][j] = sum;
 		}
@@ -60,6 +61,17 @@ void print_matrix(double **mat, int m, int n){
 	}
 }
 
+double ** transpose(double **mat, int m, int n){
+	double ** t = create_empty_matrix(n, m); // note reversed size order
+	int i, j;
+	for(i = 0; i < m; i++){
+		for(j = 0; j < n; j++){
+			t[j][i] = mat[i][j];
+		}
+	}
+	return t;
+}
+
 long long time_matmul(int size){
 	double **a = create_matrix_with_random_values(size, size);
 	double **b = create_matrix_with_random_values(size, size);
@@ -68,7 +80,8 @@ long long time_matmul(int size){
 	struct timeval end_time;
 	long long time_taken;
 	gettimeofday(&start_time, NULL);
-	mat_mul(a, b, c, size, size, size);
+	double **b_t = transpose(b, size, size);
+	mat_mul(a, b_t, c, size, size, size);
 	gettimeofday(&end_time, NULL);
 	time_taken = (end_time.tv_sec - start_time.tv_sec) * 1000000L + (end_time.tv_usec - start_time.tv_usec);
 	free_matrix(a);
@@ -77,22 +90,13 @@ long long time_matmul(int size){
 	return time_taken;
 }
 
-#define NUM_ITERATIONS 20
-#define NUM_SIZES 24
-
-const int sizes[NUM_SIZES] = { 
-	25, 50, 75, 100,
-	125, 150, 175, 200,
-	225, 250, 275, 300,
-	325, 350, 375, 400,
-	425, 450, 475, 500, 
-	525, 550, 575, 600
-};
+#define NUM_ITERATIONS 1
+#define NUM_SIZES 1
+const int sizes[NUM_SIZES] = { 2000 };
 
 int main(int argc, char *argv[]){
 	srandom(time(NULL));
 	int i;
-
 	for(i = 0; i < NUM_SIZES; i++){
 		long long time_taken = 0L;
 		int j;
