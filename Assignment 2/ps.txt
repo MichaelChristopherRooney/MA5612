@@ -1,5 +1,0 @@
-set terminal postscript eps enhanced color
-set output "graph.eps"
-set xlabel "Size"
-set ylabel "Time (microseconds)"
-plot "file" using 1:2 with lines

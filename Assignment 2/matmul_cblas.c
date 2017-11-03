@@ -39,8 +39,17 @@ long long time_matmul(int size){
 	return time_taken;
 }
 
+#define NUM_ITERATIONS 20
+const int size = 2000;
+
 int main(int argc, char *argv[]){
-	long long time_taken = time_matmul(2000);
-	printf("For size=%d the average time taken across %d runs was: %lld microseconds\n", sizes[i], NUM_ITERATIONS, time_taken);
+	int i;
+	long long time_taken = 0;
+	for(i = 0; i < NUM_ITERATIONS; i++){
+		time_taken += time_matmul(size);
+		
+	}
+	time_taken = time_taken / NUM_ITERATIONS;
+	printf("For size=%d the average time taken across %d runs was: %lld microseconds\n", size, NUM_ITERATIONS, time_taken);
 	return 0;
 }

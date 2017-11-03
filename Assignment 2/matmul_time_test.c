@@ -100,8 +100,8 @@ int main(int argc, char *argv[]){
 			time_taken += time_matmul(sizes[i]);
 		}
 		time_taken = time_taken / NUM_ITERATIONS;
-		//printf("For size=%d the average time taken across %d runs was: %lld microseconds\n", sizes[i], NUM_ITERATIONS, time_taken);
-		printf("%d\t%lld\n", sizes[i], time_taken);
+		printf("For size=%d the average time taken across %d runs was: %lld microseconds\n", sizes[i], NUM_ITERATIONS, time_taken);
+		//printf("%d\t%lld\n", sizes[i], time_taken);
 	}
 	return 0;
 }

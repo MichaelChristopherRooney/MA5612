@@ -90,17 +90,13 @@ long long time_matmul(int size){
 	return time_taken;
 }
 
-#define NUM_ITERATIONS 10
-#define NUM_SIZES 50
-int sizes[NUM_SIZES];
-//const int sizes[NUM_SIZES] = { 509, 510, 511, 512, 513, 514, 515 };
+#define NUM_ITERATIONS 20
+#define NUM_SIZES 1
+const int sizes[NUM_SIZES] = { 2000 };
 
 int main(int argc, char *argv[]){
 	srandom(time(NULL));
 	int i;
-	for(i = 0; i < NUM_SIZES; i++){
-		sizes[i] = 500 + i;
-	}
 	for(i = 0; i < NUM_SIZES; i++){
 		long long time_taken = 0L;
 		int j;
@@ -108,8 +104,8 @@ int main(int argc, char *argv[]){
 			time_taken += time_matmul(sizes[i]);
 		}
 		time_taken = time_taken / NUM_ITERATIONS;
-		//printf("For size=%d the average time taken across %d runs was: %lld microseconds\n", sizes[i], NUM_ITERATIONS, time_taken);
-		printf("%d\t%lld\n", sizes[i], time_taken);
+		printf("For size=%d the average time taken across %d runs was: %lld microseconds\n", sizes[i], NUM_ITERATIONS, time_taken);
+		//printf("%d\t%lld\n", sizes[i], time_taken);
 	}
 	return 0;
 }
