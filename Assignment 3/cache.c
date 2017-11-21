@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 
@@ -6,7 +7,12 @@ struct cache {
 	int total_size;
 	int line_size;
 	// 1 for direct mapped, 0 for fully associative (?)
+	// Also is the number of sets the cache has.
 	int associativity;
+	int num_blocks;
+	int num_block_bits;
+	int num_offset_bits;
+	int **blocks;
 };
 
 struct cache c;
@@ -67,16 +73,51 @@ int find_number_power_of_two(int num){
 	return -1;
 }
 
+int init_cache(){
+	set_cache_settings_from_args();
+	c.num_blocks = c.total_size / c.line_size;
+	c.num_block_bits = find_number_power_of_two(c.num_blocks);
+	c.num_offset_bits = find_number_power_of_two(c.line_size);
+	c.blocks = malloc(sizeof(int *) * c.associativity);
+	int *b = malloc(sizeof(int) * c.associativity * c.num_blocks);
+	int i;
+	for(i = 0; i < c.associativity; i++){
+		c.blocks[i] = &(b[i * c.num_blocks]);
+	}
+	printf("Num blocks: %d, num block bits: %d, num offset bits: %d\n", c.num_blocks, c.num_block_bits, c.num_offset_bits);
+	return 0;
+}
+
+// We want to extract the block bits from the address
+// The address is decomposed into [tag | block | offset]
+int extract_block_bits(int address){
+	unsigned int temp = address; // Needs to be unsigned for right shift to work
+	printf("0x%08x\n", temp);
+	// First clear the tag bits by shifting left
+	temp = temp << (32 - c.num_block_bits - c.num_offset_bits);
+	printf("0x%08x\n", temp);
+	// Now clear the offset bits by shifting right
+	temp = temp >> (32 - c.num_block_bits);
+	printf("0x%08x\n", temp);
+	return temp;
+}
+
 int simulate_direct_mapped_cache(){
-	int num_blocks = c.total_size / c.line_size;
-	int num_block_bits = find_number_power_of_two(num_blocks);
-	int num_offset_bits = find_number_power_of_two(c.line_size);
-	printf("%d, %d, %d\n", num_blocks, num_block_bits, num_offset_bits);
+	int num = 0x5B;
+	int block_bits = extract_block_bits(num);
+	printf("Block bits are: %d\n", block_bits);
+	printf("%d is in the block already\n", c.blocks[0][block_bits]);
+	c.blocks[0][block_bits] = num;
+	num = 0x5C;
+	block_bits = extract_block_bits(num);
+	printf("Block bits are: %d\n", block_bits);
+	printf("%d is in the block already\n", c.blocks[0][block_bits]);
+	c.blocks[0][block_bits] = num;
 	return 0;
 }
 
 int main(){
-	set_cache_settings_from_args();
+	init_cache();
 	if(c.associativity == 1){
 		simulate_direct_mapped_cache();
 	}
