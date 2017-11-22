@@ -1,0 +1,65 @@
+Num blocks: 8, num block bits: 3, num offset bits: 4
+Address is: 0x00000000
+Line 0x00000000 not yet initialised - compulsory miss!
+Address is: 0x00000004
+Line 0x00000000 contains tag 0x00000000 - hit!
+Address is: 0x0000000c
+Line 0x00000000 contains tag 0x00000000 - hit!
+Address is: 0x00002200
+Line 0x00000000 does NOT contain tag 0x00000044 - miss!
+Address is: 0x000000d0
+Line 0x00000005 not yet initialised - compulsory miss!
+Address is: 0x000000e0
+Line 0x00000006 not yet initialised - compulsory miss!
+Address is: 0x00001130
+Line 0x00000003 not yet initialised - compulsory miss!
+Address is: 0x00000028
+Line 0x00000002 not yet initialised - compulsory miss!
+Address is: 0x0000113c
+Line 0x00000003 does NOT contain tag 0x00000022 - miss!
+Address is: 0x00002204
+Line 0x00000000 does NOT contain tag 0x00000044 - miss!
+Address is: 0x00000010
+Line 0x00000001 not yet initialised - compulsory miss!
+Address is: 0x00000020
+Line 0x00000002 contains tag 0x00000000 - hit!
+Address is: 0x00000004
+Line 0x00000000 contains tag 0x00000000 - hit!
+Address is: 0x00000040
+Line 0x00000004 not yet initialised - compulsory miss!
+Address is: 0x00002208
+Line 0x00000000 does NOT contain tag 0x00000044 - miss!
+Address is: 0x00000008
+Line 0x00000000 contains tag 0x00000000 - hit!
+Address is: 0x000000a0
+Line 0x00000002 does NOT contain tag 0x00000001 - miss!
+Address is: 0x00000004
+Line 0x00000000 contains tag 0x00000000 - hit!
+Address is: 0x00001104
+Line 0x00000000 does NOT contain tag 0x00000022 - miss!
+Address is: 0x00000028
+Line 0x00000002 contains tag 0x00000000 - hit!
+Address is: 0x0000000c
+Line 0x00000000 contains tag 0x00000000 - hit!
+Address is: 0x00000084
+Line 0x00000000 does NOT contain tag 0x00000001 - miss!
+Address is: 0x0000000c
+Line 0x00000000 contains tag 0x00000000 - hit!
+Address is: 0x00003390
+Line 0x00000001 does NOT contain tag 0x00000067 - miss!
+Address is: 0x000000b0
+Line 0x00000003 does NOT contain tag 0x00000001 - miss!
+Address is: 0x00001100
+Line 0x00000000 does NOT contain tag 0x00000022 - miss!
+Address is: 0x00000028
+Line 0x00000002 contains tag 0x00000000 - hit!
+Address is: 0x00000064
+Line 0x00000006 contains tag 0x00000000 - hit!
+Address is: 0x00000070
+Line 0x00000007 not yet initialised - compulsory miss!
+Address is: 0x000000d0
+Line 0x00000005 does NOT contain tag 0x00000001 - miss!
+Address is: 0x00000008
+Line 0x00000000 contains tag 0x00000000 - hit!
+Address is: 0x00003394
+Line 0x00000001 does NOT contain tag 0x00000067 - miss!
