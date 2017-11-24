@@ -109,7 +109,6 @@ struct cache c;
 int NUM_HITS = 0;
 int NUM_MISSES = 0;
 
-// TODO:
 int set_cache_settings_from_args(int argc, char *argv[]) {
 	int i;
 	for(i = 1; i < 7; i = i + 2){
@@ -124,6 +123,8 @@ int set_cache_settings_from_args(int argc, char *argv[]) {
 	return 0;
 }
 
+// Finds what power two must be raised to to equal the number
+// Example: returns 3 when passed 8
 int find_number_power_of_two(int num) {
 	int result = 0;
 	int i;
@@ -151,10 +152,14 @@ void print_line_contents(int block, int set) {
 
 void init_cache(int argc, char *argv[]) {
 	set_cache_settings_from_args(argc, argv);
-	// TODO: increase this to 1 if it falls below that limit.
 	c.num_lines = c.total_size / c.line_size;
 	if (c.associativity != 0) {
 		c.num_blocks = c.num_lines / c.associativity;
+		if(c.num_blocks == 0){
+			printf("Cache size is too small to support associativity %d and line size %d.\nPress enter to exit.", c.associativity, c.line_size);
+			getchar();
+			exit(1);
+		}
 		c.sets_per_block = c.associativity;
 	} else {
 		c.num_blocks = 1;
@@ -183,6 +188,11 @@ void init_cache(int argc, char *argv[]) {
 // We want to extract the block bits from the address
 // The address is decomposed into [tag | block | offset]
 int extract_block_bits(int address) {
+	// With size = 128, line size = 16 and associativity = 8, the number of blocks is 1.
+	// This acts as a fully associative cache, so we can just return 0 right away.
+	if(c.num_block_bits == 0){
+		return 0;
+	}
 	unsigned int temp = address; // Needs to be unsigned for right shift to work
 	// First clear the tag bits by shifting left
 	temp = temp << (32 - c.num_block_bits - c.num_offset_bits);
@@ -256,7 +266,6 @@ void load_addresses_into_block(int tag, int block, int count) {
 	load_addresses_into_line(tag, l, count);
 }
 
-// TODO: don't hardcode size
 void simulate_cache() {
 	int i;
 	for (i = 0; i < ADDRESS_ARRAY_SIZE; i++) {
